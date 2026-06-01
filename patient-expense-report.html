@@ -179,7 +179,7 @@
         <table>
           <thead><tr><th colspan="2">PER DIEM TRACKER</th></tr></thead>
           <tbody>
-            <tr><td>FTG Maximum Daily Per Diem Rate</td><td>$110.00</td></tr>
+            <tr><td>FTG Maximum Daily Per Diem Rate</td><td>$92.00</td></tr>
             <tr><td>Number of Travel Days</td><td><input type="number" id="travelDays" name="Travel Days" oninput="calcPerDiem()" style="width:80px; text-align:right; border:none; outline:none; background:transparent;" min="0"/></td></tr>
             <tr><td>Calculated Per Diem Total</td><td id="perDiemTotal">$0.00</td></tr>
           </tbody>
@@ -325,7 +325,7 @@
 
     function calcPerDiem() {
       const days = parseFloat(document.getElementById('travelDays').value) || 0;
-      document.getElementById('perDiemTotal').textContent = fmt(days * 110);
+      document.getElementById('perDiemTotal').textContent = fmt(days * 92);
       updateGrandTotal();
     }
 
