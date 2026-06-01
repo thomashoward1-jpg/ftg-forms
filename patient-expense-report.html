@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Patient Monthly Expense Report – Fill the Gaps in Lung Cancer</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      color: #222;
+      background: #fff;
+      padding: 30px;
+      max-width: 900px;
+      margin: auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .org-name {
+      font-size: 20px;
+      font-weight: bold;
+      color: #1a5276;
+      letter-spacing: 1px;
+    }
+    .report-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      margin: 4px 0;
+    }
+    .subtitle {
+      font-size: 12px;
+      color: #555;
+      font-style: italic;
+    }
+    hr { border: none; border-top: 2px solid #1a5276; margin: 14px 0; }
+
+    .section-title {
+      background: #1a5276;
+      color: #fff;
+      padding: 5px 10px;
+      font-weight: bold;
+      font-size: 13px;
+      margin-bottom: 8px;
+      border-radius: 2px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 20px;
+      margin-bottom: 16px;
+    }
+    .field-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .field-row label {
+      white-space: nowrap;
+      font-weight: bold;
+      min-width: 150px;
+      font-size: 12px;
+    }
+    .field-row input[type="text"] {
+      border: none;
+      border-bottom: 1px solid #555;
+      width: 100%;
+      padding: 2px 4px;
+      font-size: 12px;
+      outline: none;
+      background: transparent;
+    }
+
+    /* Expense Log Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+      font-size: 12px;
+    }
+    table th {
+      background: #1a5276;
+      color: #fff;
+      padding: 6px 8px;
+      text-align: center;
+      border: 1px solid #0e3460;
+    }
+    table td {
+      border: 1px solid #ccc;
+      padding: 4px 6px;
+      text-align: center;
+    }
+    table td input[type="text"],
+    table td input[type="number"],
+    table td select {
+      width: 100%;
+      border: none;
+      outline: none;
+      font-size: 12px;
+      text-align: center;
+      background: transparent;
+    }
+    table tr:nth-child(even) td { background: #f4f8fc; }
+    .total-row td {
+      background: #d6e4f0 !important;
+      font-weight: bold;
+    }
+
+    /* Two-column section */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 16px;
+    }
+    .calc-box {
+      border: 1px solid #aac4de;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .calc-box table th { font-size: 12px; }
+    .calc-box table td { text-align: left; padding: 5px 8px; }
+    .calc-box table td:last-child { text-align: right; font-weight: bold; }
+
+    /* Expense Summary */
+    .summary-table td:first-child { text-align: left; font-weight: bold; }
+    .summary-table td:last-child { text-align: right; }
+    .grand-total td {
+      background: #1a5276 !important;
+      color: #fff;
+      font-weight: bold;
+    }
+    .note-row td {
+      background: #fff8e1 !important;
+      color: #7d5a00;
+      font-style: italic;
+      font-size: 11px;
+      text-align: left;
+      padding: 6px 8px;
+      border: 1px solid #f0d080;
+    }
+
+    /* Caregiver */
+    .caregiver-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px 16px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .caregiver-grid label { font-weight: bold; font-size: 12px; }
+    .caregiver-grid input[type="text"] {
+      border: none;
+      border-bottom: 1px solid #555;
+      width: 100%;
+      font-size: 12px;
+      padding: 2px 4px;
+      outline: none;
+      background: transparent;
+    }
+    .radio-row { display: flex; gap: 16px; }
+    .radio-row label { font-weight: normal; display: flex; align-items: center; gap: 4px; }
+
+    /* Certification */
+    .cert-box {
+      border: 1px solid #aac4de;
+      border-radius: 4px;
+      padding: 12px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      background: #f4f8fc;
+      line-height: 1.6;
+    }
+    .sig-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 20px;
+      margin-top: 10px;
+    }
+    .sig-field {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sig-field label { white-space: nowrap; font-weight: bold; font-size: 12px; }
+    .sig-field input[type="text"] {
+      border: none;
+      border-bottom: 1px solid #555;
+      width: 100%;
+      font-size: 12px;
+      outline: none;
+      background: transparent;
+    }
+
+    /* Reminder box */
+    .reminder {
+      background: #eaf4fb;
+      border: 1px solid #aac4de;
+      border-radius: 4px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #1a5276;
+    }
+    .reminder strong { font-size: 13px; }
+
+    @media print {
+      body { padding: 15px; }
+      input, select { border-bottom: 1px solid #555 !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="org-name">Fill the Gaps in Lung Cancer</div>
+    <div class="report-title">PATIENT MONTHLY EXPENSE REPORT</div>
+    <div class="subtitle">Submit this form with all receipts by the 5th of the following month.</div>
+  </div>
+  <hr/>
+
+  <!-- PATIENT INFORMATION -->
+  <div class="section-title">PATIENT INFORMATION</div>
+  <div class="field-grid">
+    <div class="field-row"><label>Patient Full Name:</label><input type="text"/></div>
+    <div class="field-row"><label>Clinical Trial Site:</label><input type="text"/></div>
+    <div class="field-row"><label>Street Address:</label><input type="text"/></div>
+    <div class="field-row"><label>Treating Physician:</label><input type="text"/></div>
+    <div class="field-row"><label>City / State / ZIP:</label><input type="text"/></div>
+    <div class="field-row"><label>Reporting Month / Year:</label><input type="text"/></div>
+    <div class="field-row"><label>Email Address:</label><input type="text"/></div>
+    <div class="field-row"><label>Prepaid Card Last 4 Digits:</label><input type="text" maxlength="4"/></div>
+    <div class="field-row"><label>Phone Number:</label><input type="text"/></div>
+  </div>
+
+  <!-- EXPENSE LOG -->
+  <div class="section-title">EXPENSE LOG</div>
+  <table id="expenseTable">
+    <thead>
+      <tr>
+        <th style="width:30px">#</th>
+        <th style="width:90px">Date</th>
+        <th style="width:180px">Expense Category</th>
+        <th>Description / Notes</th>
+        <th style="width:80px">Receipt Attached</th>
+        <th style="width:90px">Amount ($)</th>
+      </tr>
+    </thead>
+    <tbody id="expenseRows">
+    </tbody>
+    <tfoot>
+      <tr class="total-row">
+        <td colspan="5" style="text-align:right; padding-right:10px;">TOTAL EXPENSES</td>
+        <td id="totalExpenses">$0.00</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <!-- MILEAGE + PER DIEM -->
+  <div class="two-col">
+    <div class="calc-box">
+      <table>
+        <thead><tr><th colspan="2">MILEAGE CALCULATOR</th></tr></thead>
+        <tbody>
+          <tr><td>FTG Standard Rate ($/mile)</td><td>$0.21</td></tr>
+          <tr><td>Total Miles Driven This Month</td><td><input type="number" id="miles" oninput="calcMileage()" style="width:80px; text-align:right; border:none; outline:none; background:transparent;" min="0"/></td></tr>
+          <tr><td>Calculated Mileage Reimbursement</td><td id="mileageTotal">$0.00</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="calc-box">
+      <table>
+        <thead><tr><th colspan="2">PER DIEM TRACKER</th></tr></thead>
+        <tbody>
+          <tr><td>FTG Maximum Daily Per Diem Rate</td><td>$110.00</td></tr>
+          <tr><td>Number of Travel Days</td><td><input type="number" id="travelDays" oninput="calcPerDiem()" style="width:80px; text-align:right; border:none; outline:none; background:transparent;" min="0"/></td></tr>
+          <tr><td>Calculated Per Diem Total</td><td id="perDiemTotal">$0.00</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- EXPENSE SUMMARY -->
+  <div class="section-title">EXPENSE SUMMARY</div>
+  <table class="summary-table">
+    <thead>
+      <tr>
+        <th style="text-align:left">Expense Category</th>
+        <th style="text-align:right">Subtotal ($)</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Air Travel</td><td id="s-air">$0.00</td><td><input type="text"/></td></tr>
+      <tr><td>Hotel</td><td id="s-hotel">$0.00</td><td><input type="text"/></td></tr>
+      <tr><td>Ground Transportation</td><td id="s-ground">$0.00</td><td><input type="text"/></td></tr>
+      <tr><td>Mileage Reimbursement</td><td id="s-mileage">$0.00</td><td><input type="text"/></td></tr>
+      <tr><td>Food Per Diem</td><td id="s-food">$0.00</td><td><input type="text"/></td></tr>
+      <tr><td>Other (Pre-Approved)</td><td id="s-other">$0.00</td><td><input type="text"/></td></tr>
+    </tbody>
+    <tfoot>
+      <tr class="grand-total">
+        <td colspan="2" style="text-align:right; padding-right:10px;">GRAND TOTAL</td>
+        <td id="grandTotal">$0.00</td>
+      </tr>
+      <tr class="note-row">
+        <td colspan="3">&#9733; Maximum Eligible Amount: Contact FTG program coordinator for current benefit limits applicable to your trial.</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <!-- CAREGIVER -->
+  <div class="section-title">CAREGIVER EXPENSES</div>
+  <div class="caregiver-grid">
+    <label>Did a caregiver travel with you?</label>
+    <div class="radio-row">
+      <label><input type="radio" name="caregiver" value="yes"/> Yes</label>
+      <label><input type="radio" name="caregiver" value="no"/> No</label>
+    </div>
+    <label>Subtotal — Caregiver-Related Expenses Included Above ($)</label>
+    <input type="text" placeholder="$0.00"/>
+  </div>
+
+  <!-- CERTIFICATION -->
+  <div class="section-title">CERTIFICATION</div>
+  <div class="cert-box">
+    I certify that the expenses listed above are accurate, were incurred solely for clinical trial travel, and comply with the terms of my Patient Prepaid Travel Card Agreement with Fill the Gaps in Lung Cancer. I understand that false statements may result in card suspension and repayment obligations.
+    <div class="sig-grid">
+      <div class="sig-field" style="grid-column: 1 / -1;"><label>Patient Signature:</label><input type="text"/></div>
+      <div class="sig-field"><label>Printed Name:</label><input type="text"/></div>
+      <div class="sig-field"><label>Date:</label><input type="text"/></div>
+    </div>
+  </div>
+
+  <!-- REMINDER -->
+  <div class="reminder">
+    <strong>&#128203; SUBMISSION REMINDER</strong><br/>
+    Please submit this report along with all receipts to Fill the Gaps in Lung Cancer by the <strong>5th of the following month</strong>.
+  </div>
+
+  <script>
+    const categories = ["Air Travel","Hotel","Ground Transportation","Mileage Reimbursement","Food Per Diem","Other (Pre-Approved)"];
+    const categoryIds = {"Air Travel":"s-air","Hotel":"s-hotel","Ground Transportation":"s-ground","Mileage Reimbursement":"s-mileage","Food Per Diem":"s-food","Other (Pre-Approved)":"s-other"};
+
+    // Build 20 expense rows
+    const tbody = document.getElementById('expenseRows');
+    for (let i = 1; i <= 20; i++) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${i}</td>
+        <td><input type="text" placeholder="MM/DD/YYYY"/></td>
+        <td>
+          <select onchange="recalc()">
+            <option value="">-- Select --</option>
+            ${categories.map(c=>`<option value="${c}">${c}</option>`).join('')}
+          </select>
+        </td>
+        <td><input type="text"/></td>
+        <td>
+          <select>
+            <option value="">--</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </td>
+        <td><input type="number" min="0" step="0.01" placeholder="0.00" oninput="recalc()"/></td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    function fmt(n) { return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+    function recalc() {
+      const rows = tbody.querySelectorAll('tr');
+      let total = 0;
+      const catTotals = {};
+      categories.forEach(c => catTotals[c] = 0);
+
+      rows.forEach(row => {
+        const cat = row.querySelector('select') ? row.querySelector('select').value : '';
+        const amt = parseFloat(row.querySelectorAll('input[type=number]')[0]?.value) || 0;
+        total += amt;
+        if (cat && catTotals[cat] !== undefined) catTotals[cat] += amt;
+      });
+
+      document.getElementById('totalExpenses').textContent = fmt(total);
+      categories.forEach(c => {
+        document.getElementById(categoryIds[c]).textContent = fmt(catTotals[c]);
+      });
+      updateGrandTotal();
+    }
+
+    function calcMileage() {
+      const miles = parseFloat(document.getElementById('miles').value) || 0;
+      const result = miles * 0.21;
+      document.getElementById('mileageTotal').textContent = fmt(result);
+      updateGrandTotal();
+    }
+
+    function calcPerDiem() {
+      const days = parseFloat(document.getElementById('travelDays').value) || 0;
+      const result = days * 110;
+      document.getElementById('perDiemTotal').textContent = fmt(result);
+      updateGrandTotal();
+    }
+
+    function updateGrandTotal() {
+      const vals = ['s-air','s-hotel','s-ground','s-mileage','s-food','s-other']
+        .map(id => parseFloat(document.getElementById(id).textContent.replace(/[$,]/g,'')) || 0);
+      const sum = vals.reduce((a,b)=>a+b,0);
+      document.getElementById('grandTotal').textContent = fmt(sum);
+    }
+  </script>
+</body>
+</html>
